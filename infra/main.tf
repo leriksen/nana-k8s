@@ -316,3 +316,17 @@ resource "azuredevops_resource_authorization" "git" {
   resource_id = azuredevops_serviceendpoint_github.app-code.id
   authorized  = true
 }
+
+resource "azuredevops_build_definition" "min_js_webserver" {
+  project_id = azuredevops_project.nana.id
+  name       = "min_js_webserver"
+
+
+  repository {
+    repo_type             = "GitHub"
+    repo_id               = "leriksen/min-js-webserver"
+    service_connection_id = azuredevops_serviceendpoint_github.app-code.id
+    yml_path              = "azure-pipeline.yml"
+    branch_name           = "refs/heads/main"
+  }
+}
