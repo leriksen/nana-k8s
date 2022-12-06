@@ -24,7 +24,7 @@ stages:
             displayName: Build and Push
             inputs:
               command: buildAndPush
-              containerRegistry: 
+              containerRegistry: AzureCR
               repository: leriksen/hreporter
               tags: |
                 $(Build.BuildId)
