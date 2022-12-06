@@ -1,6 +1,13 @@
 name: k8s-build
 trigger: none
 
+resources:
+  repositories:
+    - repository: github
+      type: github
+      endpoint: GitHub
+      name: leriksen/min-js-webserver
+
 stages:
   - stage: build
     displayName: Docker Build and Push
@@ -10,12 +17,12 @@ stages:
         workspace:
           clean: all
         steps:
-          - checkout: self
-          - task: Docker@2
-            displayName: Build and Push
-            inputs:
-              command: buildAndPush
-              repository: leriksen/hreporter
-              tags: |
-                $(Build.BuildId)
-                latest
+          - checkout: github
+          # - task: Docker@2
+          #   displayName: Build and Push
+          #   inputs:
+          #     command: buildAndPush
+          #     repository: leriksen/hreporter
+          #     tags: |
+          #       $(Build.BuildId)
+          #       latest
