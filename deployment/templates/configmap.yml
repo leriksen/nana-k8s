@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.db.app }}-configmap
-data:
-  database_url: {{ .Values.db.app }}-service
