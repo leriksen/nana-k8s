@@ -20,6 +20,7 @@ stages:
           clean: all
         steps:
           - checkout: github
+          - script: ls -al
           # - task: Docker@2
           #   displayName: Build and Push
           #   inputs:
