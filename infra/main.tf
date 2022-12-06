@@ -303,3 +303,16 @@ resource "azuredevops_serviceendpoint_github" "app-code" {
   # auth_personal set with AZDO_GITHUB_SERVICE_CONNECTION_PAT environment variable
 }
 
+#  open service connections to all pipelines
+
+resource "azuredevops_resource_authorization" "acr" {
+  project_id  = azuredevops_project.nana.id
+  resource_id = azuredevops_serviceendpoint_azurecr.acr.id
+  authorized  = true
+}
+
+resource "azuredevops_resource_authorization" "git" {
+  project_id  = azuredevops_project.nana.id
+  resource_id = azuredevops_serviceendpoint_github.app-code.id
+  authorized  = true
+}
