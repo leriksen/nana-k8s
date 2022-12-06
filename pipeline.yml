@@ -8,6 +8,8 @@ resources:
       endpoint: GitHub
       name: leriksen/min-js-webserver
 
+pool: leiferiksenau-lab3-lappie
+
 stages:
   - stage: build
     displayName: Docker Build and Push
