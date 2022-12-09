@@ -1,0 +1,7 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: min-js-webserver
+spec:
+  rules:
+    - host: min-js-webserver-prd.27d42619d39741bab554.australiasoutheast.aksapp.io

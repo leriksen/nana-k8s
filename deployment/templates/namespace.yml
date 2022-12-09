@@ -1,6 +1,6 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: {{ .Values.namespace.name | default "default" }}
+  name: {{ .Values.namespace.name | default "default" | lower }}
   labels:
-    name: {{ .Values.namespace.name | default "default" }}
+    name: {{ .Values.namespace.name | default "default" | lower }}

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.application.name }}
-  namespace: {{ .Values.namespace.name | default "default" }}
+  name: {{ .Values.application.name | lower }}
+  namespace: {{ .Values.namespace.name | default "default" | lower }}
   labels:
-    app: {{ .Values.application.name }}
+    app: {{ .Values.application.name | lower }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.application.name }}
+      app: {{ .Values.application.name | lower }}
   template:
     metadata:
       labels:
-        app: {{ .Values.application.name }}
+        app: {{ .Values.application.name | lower }}
     spec:
       containers:
-      - name: {{ .Values.application.name }}
-        image: nanaacr.azurecr.io/leriksen/{{ .Values.application.name }}:latest
+      - name: {{ .Values.application.name | lower }}
+        image: nanaacr.azurecr.io/leriksen/{{ .Values.application.name | lower }}:latest
         ports:
         - containerPort: 80

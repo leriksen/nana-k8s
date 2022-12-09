@@ -1,21 +1,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.application.name }}
-  namespace: {{ .Values.namespace.name | default "default" }}
+  name: {{ .Values.application.name | lower }}
+  namespace: {{ .Values.namespace.name | default "default" | lower }}
   labels:
-    name: {{ .Values.application.name }}
+    name: {{ .Values.application.name | lower }}
   annotations:
     kubernetes.io/ingress.class: addon-http-application-routing
 spec:
   rules:
-    - host: {{ .Values.application.name }}.666148e84fcc4df7b32a.australiasoutheast.aksapp.io
+    - host: {{ .Values.application.name | lower }}-{{ .Values.namespace.name | default "default" | lower }}.{{ .Values.cluster.dnszone }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.application.name }}-service
+                name: {{ .Values.application.name | lower }}-service
                 port:
                   number: 80

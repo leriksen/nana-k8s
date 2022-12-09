@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: min-js-webserver
+  namespace: default
+  labels:
+    app: min-js-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: min-js-webserver
+  template:
+    metadata:
+      labels:
+        app: min-js-webserver
+    spec:
+      containers:
+      - name: min-js-webserver
+        image: nanaacr.azurecr.io/leriksen/min-js-webserver:latest
+        ports:
+        - containerPort: 80

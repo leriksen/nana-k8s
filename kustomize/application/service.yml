@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: min-js-webserver-service
+  namespace: default
+  labels:
+    app: min-js-webserver
+spec:
+  selector:
+    app: min-js-webserver
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

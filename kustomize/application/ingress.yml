@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: min-js-webserver
+  namespace: default
+  labels:
+    name: min-js-webserver
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+    - host: min-js-webserver-default.27d42619d39741bab554.australiasoutheast.aksapp.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: min-js-webserver-service
+                port:
+                  number: 80

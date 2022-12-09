@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.application.name }}-service
-  namespace: {{ .Values.namespace.name | default "default" }}
+  name: {{ .Values.application.name | lower }}-service
+  namespace: {{ .Values.namespace.name | default "default" | lower }}
   labels:
-    app: {{ .Values.application.name }}
+    app: {{ .Values.application.name | lower }}
 spec:
   selector:
-    app: {{ .Values.application.name }}
+    app: {{ .Values.application.name | lower }}
   ports:
     - protocol: TCP
       port: 80
