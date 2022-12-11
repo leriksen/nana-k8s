@@ -318,15 +318,34 @@ resource "azuredevops_resource_authorization" "git" {
 }
 
 resource "azuredevops_build_definition" "min_js_webserver" {
-  project_id = azuredevops_project.nana.id
-  name       = "min_js_webserver"
-
+  project_id      = azuredevops_project.nana.id
+  name            = "min_js_webserver"
+  path            = "\\"
+  agent_pool_name = "leiferiksenau-lab3-lappie"
+  ci_trigger {
+    override {
+      batch = true
+      branch_filter {
+        include = [
+          "master",
+          "main",
+          "release/*",
+          "hotfix/*"
+        ]
+      }
+      path_filter {
+        include = [
+          "applications/min-js-webserver/*"
+        ]
+      }
+    }
+  }
 
   repository {
     repo_type             = "GitHub"
-    repo_id               = "leriksen/min-js-webserver"
+    repo_id               = "leriksen/nana-k8s"
     service_connection_id = azuredevops_serviceendpoint_github.app-code.id
-    yml_path              = "azure-pipeline.yml"
+    yml_path              = "applications/min-js-webserver/build.yml"
     branch_name           = "refs/heads/main"
   }
 }
