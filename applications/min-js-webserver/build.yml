@@ -1,3 +1,10 @@
+resources:
+  repositories:
+    - repository: github
+      type: github
+      endpoint: GitHub
+      name: leriksen/nana-k8s
+
 stages:
   - stage: build
     displayName: Docker Build and Push
