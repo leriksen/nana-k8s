@@ -19,6 +19,11 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 2.15.0"
     }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.16.0"
+    }
+
   }
 }
 
@@ -145,39 +150,55 @@ resource "azurerm_key_vault_secret" "password" {
   value        = random_password.mongo_db_password.result
 }
 
-resource "azurerm_kubernetes_cluster" "k8s" {
-  location                  = local.location
-  name                      = "nana"
-  resource_group_name       = azurerm_resource_group.rg.name
-  dns_prefix                = "nana"
-  automatic_channel_upgrade = "stable"
-
-  default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size    = "Standard_B2s"
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  //noinspection HCLUnknownBlockType
-  oms_agent {
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  }
-
-  //noinspection HCLUnknownBlockType
-  key_vault_secrets_provider {
-    secret_rotation_enabled = false
-  }
-
-  http_application_routing_enabled = true
+resource "azurerm_virtual_network" "vnet" {
+  address_space       = ["10.0.0.0/23"]
+  location            = azurerm_resource_group.rg.location
+  name                = "nana"
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
+resource "azurerm_subnet" "subnet" {
+  name                 = "nana-aks"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes = [cidrsubnet(azurerm_virtual_network.vnet.address_space[0], 2, 0)]
+}
+
+#resource "azurerm_kubernetes_cluster" "k8s" {
+#  location                  = local.location
+#  name                      = "nana"
+#  resource_group_name       = azurerm_resource_group.rg.name
+#  dns_prefix                = "nana"
+#  automatic_channel_upgrade = "stable"
+#
+#  default_node_pool {
+#    name       = "default"
+#    node_count = 1
+#    vm_size    = "Standard_B2s"
+#  }
+#
+#  identity {
+#    type = "SystemAssigned"
+#  }
+#
+#  //noinspection HCLUnknownBlockType
+#  oms_agent {
+#    log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+#  }
+#
+#  //noinspection HCLUnknownBlockType
+#  key_vault_secrets_provider {
+#    secret_rotation_enabled = false
+#  }
+#
+#  http_application_routing_enabled = true
+#}
+
 resource "azurerm_monitor_diagnostic_setting" "aks" {
-  name                       = azurerm_kubernetes_cluster.k8s.name
-  target_resource_id         = azurerm_kubernetes_cluster.k8s.id
+#  name                       = azurerm_kubernetes_cluster.k8s.name
+#  target_resource_id         = azurerm_kubernetes_cluster.k8s.id
+  name                       = module.aks.name
+  target_resource_id         = module.aks.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
   //noinspection MissingProperty
@@ -211,9 +232,28 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
   }
 }
 
+module "aks" {
+  source = "../modules/terraform-azurerm-aks"
+
+  name                             = "nana"
+  resource_group_name              = azurerm_resource_group.rg.name
+  location                         = azurerm_resource_group.rg.location
+  dns_prefix                       = "nana"
+  aks_subnet_id                    = azurerm_subnet.subnet.id
+  http_application_routing_enabled = true
+  cluster_node_pool_name           = "internal"
+  acr_id                           = azurerm_container_registry.acr.id
+  namespaces                       = []
+  environments                     = []
+  namespace_config                 = {}
+  service_cidr                     = cidrsubnet(azurerm_virtual_network.vnet.address_space[0], 2, 1)
+  docker_bridge_cidr               = cidrsubnet(azurerm_virtual_network.vnet.address_space[0], 2, 2)
+  dns_service_ip                   = "10.0.0.131" # in 10.0.0.0/25, first block of /25
+}
+
 resource "azurerm_key_vault_access_policy" "aks" {
   key_vault_id = azurerm_key_vault.nana.id
-  object_id    = azurerm_kubernetes_cluster.k8s.key_vault_secrets_provider[0].secret_identity[0].client_id
+  object_id    = module.aks.key_vault_secrets_provider
   tenant_id    = data.azurerm_client_config.current.tenant_id
 
   secret_permissions = [
@@ -229,7 +269,7 @@ resource "azurerm_container_registry" "acr" {
 }
 
 resource "azurerm_role_assignment" "k8s-acr" {
-  principal_id                     = azurerm_kubernetes_cluster.k8s.kubelet_identity[0].object_id
+  principal_id                     = module.aks.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
