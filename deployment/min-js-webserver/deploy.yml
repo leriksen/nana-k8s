@@ -4,7 +4,7 @@ extends:
   template: ../../devops/templates/microservice.yml
   parameters:
     agentPool: nana-devops
-    helmChartPath: ../../deployment/min-js-webserver/deployment
+    helmChartPath: ./deployment/min-js-webserver/deployment
     deployBuild:
       - stageName: dev
         displayName: Dev Deployment
