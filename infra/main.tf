@@ -468,6 +468,7 @@ resource "null_resource" "configure" {
     command = "echo \"${templatefile("${path.module}/devops_agent.sh.tmpl",{
       AGENT_VERSION: var.agent_version
       AGENT_PAT: var.agent_pat
+      AGENT_POOL: azuredevops_agent_pool.devops.name
     })}\" > ${path.module}/devops_agent.sh"
   }
 

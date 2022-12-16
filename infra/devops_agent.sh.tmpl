@@ -7,7 +7,7 @@ cd /myagent
 sudo wget https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz
 sudo tar zxvf ./vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz
 sudo chmod -R 777 /myagent
-/myagent/config.sh --unattended --acceptTeeEula --url https://dev.azure.com/leiferiksenau --auth pat --token ${AGENT_PAT} --pool MyDevOpsPool --agent devops
+/myagent/config.sh --unattended --acceptTeeEula --url https://dev.azure.com/leiferiksenau --auth pat --token ${AGENT_PAT} --pool ${AGENT_POOL} --agent devops
 sudo /myagent/svc.sh install >> /home/azureuser/agent.log 2>&1
 sudo /myagent/svc.sh start >> /home/azureuser/agent.log 2>&1
 

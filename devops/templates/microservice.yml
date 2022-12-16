@@ -18,13 +18,14 @@ stages:
         steps:
           - script: |
               echo "Parameters"
-              echo "agentPool     == ${{ convertToJson(parameters.agentPool) }}
-              echo "helmChartPath == ${{ convertToJson(parameters.helmChartPath) }}
-              echo "deployBuild   == ${{ convertToJson(parameters.deployBuild) }}
+              echo "agentPool     == '${{ convertToJson(parameters.agentPool) }}'
+              echo "helmChartPath == '${{ convertToJson(parameters.helmChartPath) }}'
+              echo "deployBuild   == '${{ convertToJson(parameters.deployBuild) }}'
             displayName: Display Available Inputs
   - ${{ each deployB in parameters.deployBuild }}:
       - stage: ${{ deployB.stageName }}
         displayName: ${{ deployB.displayName }}
+        pool: ${{ parameters.agentPool }}
         jobs:
           - job: Deploy
             displayName: Deploy ${{ deployB.stageName }}
