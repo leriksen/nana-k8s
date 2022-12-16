@@ -39,7 +39,7 @@ stages:
                 inputs:
                   command: package
                   chartType: FilePath
-                  chartPath: ${{ parameters.chartPath }}
+                  chartPath: ${{ parameters.helmChartPath }}
                   chartVersion: 0.1.0
                   destination: $(Build.ArtifactStagingDirectory)
                   save: false
