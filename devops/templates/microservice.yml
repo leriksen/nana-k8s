@@ -33,7 +33,7 @@ stages:
             steps:
               - task: KubectlInstaller@0
               - task: HelmInstaller@1
-              - task: HelmPackage
+              - task: HelmDeploy@0
                 displayName: Package Helm Manifest
                 inputs:
                   command: package
