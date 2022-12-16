@@ -1,0 +1,4 @@
+application:
+  name: min-js-webserver
+  port: 80
+  version: latest

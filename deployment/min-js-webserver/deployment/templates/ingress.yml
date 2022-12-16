@@ -18,4 +18,4 @@ spec:
               service:
                 name: {{ .Values.application.name | lower }}-service
                 port:
-                  number: 80
+                  number: {{ .Values.application.port | default "80" }}

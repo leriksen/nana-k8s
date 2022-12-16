@@ -1,0 +1,44 @@
+parameters:
+  - name: agentPool
+    type: string
+  - name: helmChartPath
+    type: string
+  - name: deployBuild
+    type: object
+    default: []
+
+stages:
+  - stage: Prepare
+    displayName: Prepare
+    jobs:
+      - job: Checks
+        displayName: Checks
+        workspace:
+          clean: all
+        steps:
+          - script: |
+              echo "Parameters"
+              echo "agentPool     == ${{ convertToJson(parameters.agentPool) }}
+              echo "helmChartPath == ${{ convertToJson(parameters.helmChartPath) }}
+              echo "deployBuild   == ${{ convertToJson(parameters.deployBuild) }}
+            displayName: Display Available Inputs
+  - ${{ each deployB in parameters.deployBuild }}:
+      - stage: ${{ deployB.stageName }}
+        displayName: ${{ deployB.displayName }}
+        jobs:
+          - job: Deploy
+            displayName: Deploy ${{ deployB.stageName }}
+            workspace:
+              clean: all
+            steps:
+              - task: KubectlInstaller@0
+              - task: HelmInstaller@1
+              - task: HelmPackage
+                displayName: Package Helm Manifest
+                inputs:
+                  command: package
+                  chartType: FilePath
+                  chartPath: ${{ parameters.chartPath }}
+                  chartVersion: 0.1.0
+                  destination: $(Build.ArtifactStagingDirectory)
+                  save: false

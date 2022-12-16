@@ -1,0 +1,13 @@
+trigger: none
+
+extends:
+  template: ../../devops/templates/microservice.yml
+  parameters:
+    agentPool: nana-devops
+    helmChartPath: ../../deployment/min-js-webserver/deployment
+    deployBuild:
+      - stageName: dev
+        displayName: Dev Deployment
+        k8sServiceConnection: nana
+        helmVauleFile: values-dev.yml
+        dockerRegistry: nanaacr.azurecr.io/leriksen

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ .Values.application.name | lower }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.application.replicas | default "1" }}
   selector:
     matchLabels:
       app: {{ .Values.application.name | lower }}
@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: {{ .Values.application.name | lower }}
-        image: nanaacr.azurecr.io/leriksen/{{ .Values.application.name | lower }}:latest
+        image: {{ .Values.docker.registry }}/{{ .Values.application.name | lower }}:{{ .Values.application.port | default "latest" }}
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.application.port | default "80" }}
