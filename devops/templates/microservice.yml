@@ -56,7 +56,7 @@ stages:
                 displayName: Deploy Helm Manifest
                 inputs:
                   connectionType: Azure Resource Manager
-                  azureSubscription: ${{ dpeloyB.azureServiceConnection }}
+                  azureSubscription: ${{ deployB.azureServiceConnection }}
                   azureResourceGroup: ${{ deployB.resourceGroup }}
                   kubernetesCluster: ${{ deployB.aksName }}
                   useClusterAdmin: true
