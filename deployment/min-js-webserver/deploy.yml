@@ -8,6 +8,8 @@ extends:
     deployBuild:
       - stageName: dev
         displayName: Dev Deployment
-        k8sServiceConnection: nana
+        azureServiceConnection: AzureRM
         helmVauleFile: values-dev.yml
         dockerRegistry: nanaacr.azurecr.io/leriksen
+        aksCluster: nana
+        resoureGroup: nana

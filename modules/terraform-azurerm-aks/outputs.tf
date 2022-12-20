@@ -7,6 +7,7 @@ output "fqdn" {
   description = "Returns the FQDN (Fully Qualified Domain Name) of the AKS cluster."
   value       = azurerm_kubernetes_cluster.this.fqdn
 }
+
 output "name" {
   description = "Returns the Name of the AKS cluster."
   value       = azurerm_kubernetes_cluster.this.name
