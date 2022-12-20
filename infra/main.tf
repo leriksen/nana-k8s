@@ -226,6 +226,12 @@ module "aks" {
   dns_service_ip                   = "10.0.0.131" # in 10.0.0.0/25, first block of /25
 }
 
+resource "azurerm_role_assignment" "sp_aks" {
+  principal_id         = azuread_service_principal.azdo.object_id
+  scope                = module.aks.id
+  role_definition_name = "Contributor"
+}
+
 resource "azurerm_key_vault_access_policy" "aks" {
   key_vault_id = azurerm_key_vault.nana.id
   object_id    = module.aks.key_vault_secrets_provider
