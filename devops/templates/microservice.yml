@@ -59,7 +59,7 @@ stages:
               - task: HelmDeploy@0
                 displayName: Deploy Helm Manifest
                 inputs:
-                  connectionType: Azure Resource Manager
+                  connectionType: None
                   azureSubscription: ${{ deployB.azureServiceConnection }}
                   azureResourceGroup: ${{ deployB.resourceGroup }}
                   kubernetesCluster: ${{ deployB.aksCluster }}
