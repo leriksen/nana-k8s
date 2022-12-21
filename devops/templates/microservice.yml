@@ -64,7 +64,7 @@ stages:
                     set -euo pipefail
                     echo rg      == ${{ deployB.resourceGroup }}
                     echo cluster == ${{ deployB.aksCluster }}
-                    az aks show --resource-group ${{ deployB.resourceGroup }} --name ${{ deployB.aksCluster }} --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o tsv
+                    az aks show --resource-group ${{ deployB.resourceGroup }} --name ${{ deployB.aksCluster }} -o json
                     export DNSZONE=$(az aks show --resource-group ${{ deployB.resourceGroup }} --name ${{ deployB.aksCluster }} --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o tsv)
                     echo "##vso[task.setvariable variable=dnszone]${DNSZONE}"
               - task: HelmDeploy@0
@@ -73,7 +73,7 @@ stages:
                   connectionType: None
                   azureSubscription: ${{ deployB.azureServiceConnection }}
                   azureResourceGroup: ${{ deployB.resourceGroup }}
-                  kubernetesCluster: ${{ deployB.aksCluster }}.$(dnszone)
+                  kubernetesCluster: ${{ deployB.aksCluster }}
                   useClusterAdmin: true
                   command: upgrade
                   install: true
