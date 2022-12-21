@@ -50,6 +50,7 @@ stages:
                   scriptType: bash
                   scriptLocation: inlineScript
                   inlineScript: |
+                    set -euo pipefail
                     echo rg      == ${{ deployB.resourceGroup }}
                     echo cluster == ${{ deployB.aksCluster }}
                     az aks show --resource-group ${{ deployB.resourceGroup }} --name ${{ deployB.aksCluster }} --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o tsv
@@ -61,7 +62,7 @@ stages:
                   connectionType: Azure Resource Manager
                   azureSubscription: ${{ deployB.azureServiceConnection }}
                   azureResourceGroup: ${{ deployB.resourceGroup }}
-                  kubernetesCluster: ${{ deployB.aksName }}
+                  kubernetesCluster: ${{ deployB.aksCluster }}
                   useClusterAdmin: true
                   command: upgrade
                   install: true

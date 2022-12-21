@@ -469,7 +469,6 @@ resource "null_resource" "configure" {
     azdo_pat     = base64encode(var.agent_pat)
     azdo_version = var.agent_version
     azcli        = base64encode(file("${path.module}/az_cli.sh"))
-    jq           = base64encode(file("${path.module}/jq.sh"))
     zip          = base64encode(file("${path.module}/zip.sh"))
     vstaagent    = base64encode(file("${path.module}/devops_agent.sh.tmpl"))
   }
@@ -492,7 +491,6 @@ resource "null_resource" "configure" {
     scripts = [
       "${path.module}/devops_agent.sh",
       "${path.module}/az_cli.sh",
-      "${path.module}/jq.sh",
       "${path.module}/zip.sh",
     ]
   }
