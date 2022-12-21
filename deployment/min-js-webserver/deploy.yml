@@ -12,4 +12,4 @@ extends:
         helmVauleFile: values-dev.yml
         dockerRegistry: nanaacr.azurecr.io/leriksen
         aksCluster: nana
-        resoureGroup: nana
+        resourceGroup: nana
