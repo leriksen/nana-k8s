@@ -44,6 +44,17 @@ stages:
                   destination: $(Build.ArtifactStagingDirectory)
                   save: false
               - task: AzureCLI@2
+                displayName: get AKS creds
+                inputs:
+                  azureSubscription: AzureRM
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    set -euo pipefail
+                    echo rg      == ${{ deployB.resourceGroup }}
+                    echo cluster == ${{ deployB.aksCluster }}
+                    az aks get-credentials --resource-group ${{ deployB.resourceGroup }} --name ${{ deployB.aksCluster }} --overwrite-existing
+              - task: AzureCLI@2
                 displayName: get DNSZONE
                 inputs:
                   azureSubscription: AzureRM
@@ -62,7 +73,7 @@ stages:
                   connectionType: None
                   azureSubscription: ${{ deployB.azureServiceConnection }}
                   azureResourceGroup: ${{ deployB.resourceGroup }}
-                  kubernetesCluster: ${{ deployB.aksCluster }}
+                  kubernetesCluster: ${{ deployB.aksCluster }}.$(dnszone)
                   useClusterAdmin: true
                   command: upgrade
                   install: true
