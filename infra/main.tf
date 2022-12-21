@@ -227,7 +227,8 @@ module "aks" {
 }
 
 resource "azurerm_role_assignment" "sp_aks" {
-  principal_id         = azuread_service_principal.azdo.object_id
+  principal_id         = azuread_service_principal.azdo.application_id
+  skip_service_principal_aad_check = true
   scope                = module.aks.id
   role_definition_name = "Contributor"
 }
@@ -300,7 +301,7 @@ resource "azuredevops_serviceendpoint_azurerm" "azurerm" {
   description           = "Managed by Terraform"
 
   credentials {
-    serviceprincipalid  = azuread_service_principal.azdo.object_id
+    serviceprincipalid  = azuread_service_principal.azdo.application_id
     serviceprincipalkey = azuread_service_principal_password.azdo.value
   }
 

@@ -50,7 +50,7 @@ stages:
                   scriptType: bash
                   scriptLocation: inlineScript
                   inlineScript: |
-                    export DNSZONE=$(az aks show --resource-group ${{ deployB.ressourceGroup }} --name ${{ deployB.aksCluster }} --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o json | jq -r)
+                    export DNSZONE=$(az aks show --resource-group ${{ deployB.ressourceGroup }} --name ${{ deployB.aksCluster }} --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o json | jq -r -)
                     echo "##vso[task.setvariable variable=dnszone]${DNSZONE"}
               - task: HelmDeploy@0
                 displayName: Deploy Helm Manifest
