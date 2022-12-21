@@ -230,7 +230,14 @@ resource "azurerm_role_assignment" "sp_aks" {
   principal_id         = azuread_service_principal.azdo.application_id
   skip_service_principal_aad_check = true
   scope                = module.aks.id
-  role_definition_name = "Contributor"
+  role_definition_name = "Reader"
+}
+
+resource "azurerm_role_assignment" "sp_aks" {
+  principal_id         = azuread_service_principal.azdo.application_id
+  skip_service_principal_aad_check = true
+  scope                = module.aks.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
 }
 
 resource "azurerm_key_vault_access_policy" "aks" {
