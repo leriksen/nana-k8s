@@ -226,15 +226,19 @@ module "aks" {
   dns_service_ip                   = "10.0.0.131" # in 10.0.0.0/25, first block of /25
 }
 
-resource "azurerm_role_assignment" "sp_aks" {
-  principal_id         = azuread_service_principal.azdo.application_id
+resource "azurerm_role_assignment" "sp_aks_reader" {
+  principal_id         = azuread_service_principal.azdo.object_id
   skip_service_principal_aad_check = true
   scope                = module.aks.id
   role_definition_name = "Reader"
 }
 
-resource "azurerm_role_assignment" "sp_aks" {
-  principal_id         = azuread_service_principal.azdo.application_id
+output "aks_sp" {
+  value = azuread_service_principal.azdo
+}
+
+resource "azurerm_role_assignment" "sp_aks_user" {
+  principal_id         = azuread_service_principal.azdo.object_id
   skip_service_principal_aad_check = true
   scope                = module.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
